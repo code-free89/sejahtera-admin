@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/outline';
 import firebase from 'firebase';
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import Button from 'components/Button';
+import React, { useEffect, useState } from 'react';
+import { NewsType } from 'types/global';
 import ReactPaginate from 'react-paginate';
-import EditForm from 'components/Dialog/EditForm';
-import { UserType } from 'types/global';
+import EditNews from 'components/Dialog/EditNews';
 import Alert from 'components/Dialog/Alert';
 import { toast } from 'react-toast';
 
-const Users = () => {
-  const [users, setUsers] = useState<UserType[]>([]);
-  const [vaccines, setVaccines] = useState<string[]>([]);
+const News = () => {
   const db = firebase.firestore();
+  const [news, setNews] = useState<NewsType[]>([]);
   const [pageCount, setPageCount] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(0);
-  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+  const [isNewsEditOpen, setIsNewsEditOpen] = useState<boolean>(false);
+  const [newsId, setNewsId] = useState<number>(0);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-  const [userID, setUserID] = useState<string>('');
+  const [type, setType] = useState<string>('edit');
   const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE ?? '10', 10);
 
-  const collectUsers = async (): Promise<void> => {
-    const data = await db.collection('users').get();
-    setUsers([...data.docs.map(item => ({ id: item.id, data: item.data() }))]);
-  };
-
-  const collectVaccines = async (): Promise<void> => {
-    const data = await db.collection('vaccines').get();
-    setVaccines([...vaccines, ...data.docs.map(item => item.id)]);
+  const collectNews = async (): Promise<void> => {
+    const data = await db.collection('news').get();
+    setNews([
+      ...data.docs.map(item => ({
+        title: item.data().title,
+        date: item.data().date,
+        timestamp: item.data().timestamp,
+      })),
+    ]);
   };
 
   const changePage = (data: { selected: number }) => {
@@ -33,38 +35,36 @@ const Users = () => {
   };
 
   useEffect(() => {
-    collectUsers();
-    collectVaccines();
+    collectNews();
   }, []);
 
   useEffect(() => {
-    setPageCount(users.length / itemsPerPage);
-  }, [users]);
+    setPageCount(news.length / itemsPerPage);
+  }, [news]);
 
   return (
     <div className="w-full pt-12">
-      <EditForm
-        isOpen={isEditOpen}
+      <EditNews
+        isOpen={isNewsEditOpen}
         closeModal={() => {
-          setIsEditOpen(false);
+          setIsNewsEditOpen(false);
         }}
-        vaccines={vaccines}
-        userId={userID}
+        newsId={newsId}
+        type={type}
       />
       <Alert
         isOpen={isAlertOpen}
         closeModal={() => {
           setIsAlertOpen(false);
         }}
-        title="Delete User"
-        description="Do you want to delete this user?"
+        title="Delete News"
+        description="Do you want to delete this news?"
         onOkay={async () => {
           try {
-            await db.collection('users').doc(userID).delete();
-            collectUsers();
+            await db.collection('news').doc(newsId.toString()).delete();
+            collectNews();
           } catch (e) {
             toast.error(e.message);
-            console.log(e.message);
           }
           setIsAlertOpen(false);
         }}
@@ -73,20 +73,27 @@ const Users = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col mt-2">
             <div className="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+              <div className="flex justify-end m-4">
+                <Button
+                  type="button"
+                  className="w-44 bg-green-400 hover:bg-green-500"
+                  onClick={() => {
+                    setType('create');
+                    setIsNewsEditOpen(true);
+                  }}
+                >
+                  <PlusIcon className="w-5 mr-3" />
+                  Add News
+                </Button>
+              </div>
               <table className="min-w-full divide-y divide-gray-200">
                 <thead>
                   <tr>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
+                      Title
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      PhoneNumber
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                      Date
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Action
@@ -94,30 +101,23 @@ const Users = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {users.map((user, index) =>
+                  {news.map((item, index) =>
                     index >= pageNumber * itemsPerPage && index < (pageNumber + 1) * itemsPerPage ? (
                       <tr key={`user-${index}`} className="bg-white">
                         <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{user.data.name} </span>
+                          <span className="text-gray-900 font-medium">{item.title} </span>
                         </td>
                         <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{user.data.email} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{user.data.phoneNumber} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">
-                            {user.data.dose2 === '' ? 'Not Approved' : 'Approved'}
-                          </span>
+                          <span className="text-gray-900 font-medium">{item.date} </span>
                         </td>
                         <td className="px-6 py-4 text-center flex items-center justify-center space-x-4">
                           <div
                             aria-hidden
                             className="bg-gray-100 rounded-md border-gray-400 p-2"
                             onClick={() => {
-                              setIsEditOpen(true);
-                              setUserID(user.id);
+                              setType('edit');
+                              setNewsId(item.timestamp);
+                              setIsNewsEditOpen(true);
                             }}
                           >
                             <PencilIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-green-500" />
@@ -127,7 +127,7 @@ const Users = () => {
                             className="bg-gray-100 rounded-md border-gray-400 p-2"
                             onClick={() => {
                               setIsAlertOpen(true);
-                              setUserID(user.id);
+                              setNewsId(item.timestamp);
                             }}
                           >
                             <TrashIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-red-500" />
@@ -176,4 +176,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default News;

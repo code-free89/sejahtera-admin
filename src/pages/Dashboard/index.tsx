@@ -4,6 +4,7 @@ import Sidebar from 'components/Sidebar';
 import Home from './Main';
 import Users from './Users';
 import Vaccines from './Vaccines';
+import News from './News';
 
 export default function Dashboard() {
   return (
@@ -13,6 +14,7 @@ export default function Dashboard() {
         <Route exact path="/home" component={Home} />
         <Route exact path="/users" component={Users} />
         <Route exact path="/vaccines" component={Vaccines} />
+        <Route exact path="/news" component={News} />
         <Redirect to="/" />
       </Switch>
     </div>

@@ -40,3 +40,9 @@ interface VaccineType {
   batch: string;
   manufacturer: string;
 }
+
+interface NewsType {
+  date: string;
+  title: string;
+  timestamp: number;
+}

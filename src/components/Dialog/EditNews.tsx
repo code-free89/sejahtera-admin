@@ -7,42 +7,47 @@ import { toast } from 'react-toast';
 type Props = {
   isOpen: boolean;
   closeModal: (value: boolean) => void;
-  vaccineId: string;
+  newsId: number;
   type: string;
 };
 
 const db = firebase.firestore();
 
-const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) => {
-  const [vaccineName, setVaccineName] = useState('');
-  const [vaccineBatch, setVaccineBatch] = useState('');
-  const [vaccineManufacturer, setVaccineManufacturer] = useState('');
+const EditNews: React.FC<Props> = ({ isOpen, closeModal, newsId, type }) => {
+  const [newsDate, setNewsDate] = useState<string>('');
+  const [newsImage, setNewsImage] = useState<string>('');
+  const [newsTitle, setNewsTitle] = useState<string>('');
+  const [newsLink, setNewsLink] = useState<boolean>(false);
 
-  const updateVaccineData = async () => {
-    if (vaccineId !== '') {
-      const vaccineData = await db.collection('vaccines').doc(vaccineId).get();
-      if (vaccineData) {
-        setVaccineName(vaccineData.id);
-        setVaccineBatch(vaccineData.data()!.batch);
-        setVaccineManufacturer(vaccineData.data()!.manufacturer);
+  const updateNewsData = async () => {
+    if (newsId !== 0) {
+      const newsData = await db.collection('news').doc(newsId.toString()).get();
+      if (newsData) {
+        setNewsDate(newsData.data()!.date);
+        setNewsImage(newsData.data()!.image);
+        setNewsTitle(newsData.data()!.title);
+        setNewsLink(newsData.data()!.link);
       }
     }
   };
 
   const onSave = async () => {
     try {
+      const timestamp = new Date(newsDate).getTime();
       if (type === 'create')
         await db
-          .collection('vaccines')
-          .doc(vaccineName)
-          .set({ batch: vaccineBatch, manufacturer: vaccineManufacturer });
+          .collection('news')
+          .doc(timestamp.toString())
+          .set({ date: newsDate, image: newsImage, link: newsLink, title: newsTitle, timestamp });
       else {
-        const vaccineData = (
-          await db.collection('vaccines').doc(vaccineName).get()
+        const newsData = (
+          await db.collection('news').doc(timestamp.toString()).get()
         ).data() as firebase.firestore.DocumentData;
-        vaccineData.batch = vaccineBatch;
-        vaccineData.manufacturer = vaccineManufacturer;
-        await db.collection('vaccines').doc(vaccineName).set(vaccineData);
+        console.log(newsData);
+        newsData.title = newsTitle;
+        newsData.image = newsImage;
+        newsData.link = newsLink;
+        await db.collection('news').doc(newsId.toString()).set(newsData);
       }
     } catch (e) {
       toast.warn(e.message);
@@ -51,10 +56,11 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
   };
 
   useEffect(() => {
-    setVaccineName('');
-    setVaccineBatch('');
-    setVaccineManufacturer('');
-    if (type === 'edit') updateVaccineData();
+    setNewsDate('');
+    setNewsImage('');
+    setNewsTitle('');
+    setNewsLink(false);
+    if (type === 'edit') updateNewsData();
   }, [isOpen]);
 
   return (
@@ -79,35 +85,46 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
             >
               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                 <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                  Vaccine
+                  News
                 </Dialog.Title>
                 <div className="mt-8">
-                  <div className="text-base text-gray-600 font-bold my-3">Name : </div>
+                  <div className="text-base text-gray-600 font-bold my-3">Title : </div>
                   <input
                     type="text"
                     className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={newsTitle}
+                    onChange={e => {
+                      setNewsTitle(e.target.value);
+                    }}
+                  />
+                  <div className="text-base text-gray-600 font-bold my-3">Date : (30 Aug 2021, 11:03 AM)</div>
+                  <input
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={newsDate}
                     disabled={type === 'edit'}
-                    value={vaccineName}
                     onChange={e => {
-                      setVaccineName(e.target.value);
+                      setNewsDate(e.target.value);
                     }}
                   />
-                  <div className="text-base text-gray-600 font-bold my-3">Batch : </div>
+                  <div className="flex items-center my-3">
+                    <div className="text-xs text-gray-600 mr-3">AttachLink : </div>
+                    <input
+                      type="checkbox"
+                      checked={newsLink}
+                      onChange={e => {
+                        console.log(e.target.checked);
+                        setNewsLink(e.target.checked);
+                      }}
+                    />
+                  </div>
+                  <div className="text-base text-gray-600 font-bold my-3">Image : </div>
                   <input
                     type="text"
                     className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    value={vaccineBatch}
+                    value={newsImage}
                     onChange={e => {
-                      setVaccineBatch(e.target.value);
-                    }}
-                  />
-                  <div className="text-base text-gray-600 font-bold my-3">Manufacturer : </div>
-                  <input
-                    type="text"
-                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    value={vaccineManufacturer}
-                    onChange={e => {
-                      setVaccineManufacturer(e.target.value);
+                      setNewsImage(e.target.value);
                     }}
                   />
                 </div>
@@ -136,4 +153,4 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
   );
 };
 
-export default EditVaccine;
+export default EditNews;

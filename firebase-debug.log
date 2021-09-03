@@ -1,0 +1,17 @@
+[debug] [2021-09-03T09:05:59.722Z] ----------------------------------------------------------------------
+[debug] [2021-09-03T09:05:59.724Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\com\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-09-03T09:05:59.724Z] CLI Version:   9.12.1
+[debug] [2021-09-03T09:05:59.724Z] Platform:      win32
+[debug] [2021-09-03T09:05:59.724Z] Node Version:  v14.17.0
+[debug] [2021-09-03T09:05:59.725Z] Time:          Fri Sep 03 2021 12:05:59 GMT+0300 (Moscow Standard Time)
+[debug] [2021-09-03T09:05:59.725Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-09-03T09:05:59.735Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-09-03T09:05:59.736Z] > authorizing via signed-in user (prince891028@gmail.com)
+[debug] [2021-09-03T09:05:59.736Z] [iam] checking project sejahtera-bea87 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2021-09-03T09:05:59.738Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-09-03T09:05:59.738Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-09-03T09:06:00.745Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","date":"Fri, 03 Sep 2021 09:08:24 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-09-03T09:06:00.828Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/sejahtera-bea87:testIamPermissions  
+ {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
