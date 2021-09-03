@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import Sidebar from 'components/Sidebar';
 import Home from './Main';
 import Users from './Users';
+import Vaccines from './Vaccines';
 
 export default function Dashboard() {
   return (
@@ -11,6 +12,7 @@ export default function Dashboard() {
       <Switch>
         <Route exact path="/home" component={Home} />
         <Route exact path="/users" component={Users} />
+        <Route exact path="/vaccines" component={Vaccines} />
         <Redirect to="/" />
       </Switch>
     </div>

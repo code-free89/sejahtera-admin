@@ -34,3 +34,9 @@ interface UserType {
   id: string;
   data: firebase.firestore.DocumentData;
 }
+
+interface VaccineType {
+  name: string;
+  batch: string;
+  manufacturer: string;
+}
