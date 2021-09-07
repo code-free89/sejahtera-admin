@@ -4,6 +4,7 @@ import DropDown from 'components/Dropdown';
 import Button from 'components/Button';
 import firebase from 'firebase';
 import { toast } from 'react-toast';
+import { states } from '../../constants/index';
 
 type Props = {
   isOpen: boolean;
@@ -20,6 +21,10 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
   const [dose1Date, setDose1Date] = useState<string>('');
   const [dose2Date, setDose2Date] = useState<string>('');
 
+  const [name, setName] = useState<string>('');
+  const [passport, setPassport] = useState<string>('');
+  const [state, setState] = useState<string>('');
+
   const updateSelectedVaccine = async () => {
     if (userId !== '') {
       const userData = (await db.collection('users').doc(userId).get()).data() as firebase.firestore.DocumentData;
@@ -28,6 +33,9 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
         setDose2(userData.dose2);
         setDose1Date(userData.dose1_date);
         setDose2Date(userData.dose2_date);
+        setName(userData.name);
+        setPassport(userData.passportNo);
+        setState(userData.state);
       }
     }
   };
@@ -39,9 +47,12 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
       userData.dose1_date = dose1Date;
       userData.dose2 = dose2;
       userData.dose2_date = dose2Date;
+      userData.name = name;
+      userData.passportNo = passport;
+      userData.state = state;
       await db.collection('users').doc(userId).set(userData);
       closeModal(false);
-    } catch (e) {
+    } catch (e: any) {
       toast.warn(e.message);
     }
   };
@@ -75,6 +86,26 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
                   Certificate
                 </Dialog.Title>
                 <div className="mt-8">
+                  <div className="text-base text-gray-600 font-bold my-3">Name: </div>
+                  <input
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={name}
+                    onChange={e => {
+                      setName(e.target.value);
+                    }}
+                  />
+                  <div className="text-base text-gray-600 font-bold my-3">Passport No: </div>
+                  <input
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={passport}
+                    onChange={e => {
+                      setPassport(e.target.value);
+                    }}
+                  />
+                  <div className="text-base text-gray-600 font-bold my-3">State: </div>
+                  <DropDown selectedItem={state} setSelectedItem={setState} data={states} />
                   <div className="text-base text-gray-600 font-bold my-3">Dose 1: </div>
                   <DropDown selectedItem={dose1} setSelectedItem={setDose1} data={vaccines} />
                   <div className="text-base text-gray-600 font-bold my-3">Dose 1 Date: </div>
