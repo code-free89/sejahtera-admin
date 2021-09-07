@@ -5,6 +5,7 @@ import {
   QuestionMarkCircleIcon,
   ScaleIcon,
   ShieldCheckIcon,
+  StatusOnlineIcon,
   UserGroupIcon,
 } from '@heroicons/react/outline';
 
@@ -13,6 +14,7 @@ export const navigation = [
   { name: 'Users', href: '/users', icon: UserGroupIcon },
   { name: 'Vaccines', href: '/vaccines', icon: ClockIcon },
   { name: 'News', href: '/news', icon: ScaleIcon },
+  { name: 'Statistics', href: '/statistics', icon: StatusOnlineIcon },
 ];
 
 export const secondaryNavigation = [
