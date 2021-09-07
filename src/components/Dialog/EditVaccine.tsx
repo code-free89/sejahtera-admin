@@ -17,6 +17,7 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
   const [vaccineName, setVaccineName] = useState('');
   const [vaccineBatch, setVaccineBatch] = useState('');
   const [vaccineManufacturer, setVaccineManufacturer] = useState('');
+  const [vaccineFacility, setVaccineFacility] = useState('');
 
   const updateVaccineData = async () => {
     if (vaccineId !== '') {
@@ -25,6 +26,7 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
         setVaccineName(vaccineData.id);
         setVaccineBatch(vaccineData.data()!.batch);
         setVaccineManufacturer(vaccineData.data()!.manufacturer);
+        setVaccineFacility(vaccineData.data()!.facility);
       }
     }
   };
@@ -35,16 +37,17 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
         await db
           .collection('vaccines')
           .doc(vaccineName)
-          .set({ batch: vaccineBatch, manufacturer: vaccineManufacturer });
+          .set({ batch: vaccineBatch, manufacturer: vaccineManufacturer, facility: vaccineFacility });
       else {
         const vaccineData = (
           await db.collection('vaccines').doc(vaccineName).get()
         ).data() as firebase.firestore.DocumentData;
         vaccineData.batch = vaccineBatch;
         vaccineData.manufacturer = vaccineManufacturer;
+        vaccineData.facility = vaccineManufacturer;
         await db.collection('vaccines').doc(vaccineName).set(vaccineData);
       }
-    } catch (e) {
+    } catch (e: any) {
       toast.warn(e.message);
     }
     closeModal(false);
@@ -92,15 +95,6 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
                       setVaccineName(e.target.value);
                     }}
                   />
-                  <div className="text-base text-gray-600 font-bold my-3">Batch : </div>
-                  <input
-                    type="text"
-                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    value={vaccineBatch}
-                    onChange={e => {
-                      setVaccineBatch(e.target.value);
-                    }}
-                  />
                   <div className="text-base text-gray-600 font-bold my-3">Manufacturer : </div>
                   <input
                     type="text"
@@ -108,6 +102,24 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
                     value={vaccineManufacturer}
                     onChange={e => {
                       setVaccineManufacturer(e.target.value);
+                    }}
+                  />
+                  <div className="text-base text-gray-600 font-bold my-3">Facility : </div>
+                  <input
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={vaccineFacility}
+                    onChange={e => {
+                      setVaccineFacility(e.target.value);
+                    }}
+                  />
+                  <div className="text-base text-gray-600 font-bold my-3">Batch : </div>
+                  <input
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={vaccineBatch}
+                    onChange={e => {
+                      setVaccineBatch(e.target.value);
                     }}
                   />
                 </div>

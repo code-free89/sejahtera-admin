@@ -39,6 +39,7 @@ interface VaccineType {
   name: string;
   batch: string;
   manufacturer: string;
+  facility: string;
 }
 
 interface NewsType {

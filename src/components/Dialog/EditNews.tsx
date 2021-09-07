@@ -37,19 +37,17 @@ const EditNews: React.FC<Props> = ({ isOpen, closeModal, newsId, type }) => {
       if (type === 'create')
         await db
           .collection('news')
-          .doc(timestamp.toString())
-          .set({ date: newsDate, image: newsImage, link: newsLink, title: newsTitle, timestamp });
+          .add({ date: newsDate, image: newsImage, link: newsLink, title: newsTitle, timestamp });
       else {
         const newsData = (
           await db.collection('news').doc(timestamp.toString()).get()
         ).data() as firebase.firestore.DocumentData;
-        console.log(newsData);
         newsData.title = newsTitle;
         newsData.image = newsImage;
         newsData.link = newsLink;
         await db.collection('news').doc(newsId.toString()).set(newsData);
       }
-    } catch (e) {
+    } catch (e: any) {
       toast.warn(e.message);
     }
     closeModal(false);

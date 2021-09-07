@@ -22,7 +22,12 @@ const Vaccines: React.FC = () => {
   const collectVaccines = async (): Promise<void> => {
     const data = await db.collection('vaccines').get();
     setVaccines([
-      ...data.docs.map(item => ({ name: item.id, batch: item.data().batch, manufacturer: item.data().manufacturer })),
+      ...data.docs.map(item => ({
+        name: item.id,
+        batch: item.data().batch,
+        manufacturer: item.data().manufacturer,
+        facility: item.data().facility,
+      })),
     ]);
   };
 
@@ -59,7 +64,7 @@ const Vaccines: React.FC = () => {
           try {
             await db.collection('vaccines').doc(vaccineId).delete();
             collectVaccines();
-          } catch (e) {
+          } catch (e: any) {
             toast.error(e.message);
           }
           setIsAlertOpen(false);
@@ -88,11 +93,14 @@ const Vaccines: React.FC = () => {
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Batch
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-md">
+                      Manufacturer
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Manufacturer
+                      Facility
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Batch
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Action
@@ -106,11 +114,14 @@ const Vaccines: React.FC = () => {
                         <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
                           <span className="text-gray-900 font-medium">{vaccine.name} </span>
                         </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{vaccine.batch} </span>
+                        <td className="px-6 py-4 text-left whitespace-normal text-sm text-gray-500 max-w-md">
+                          <div className="text-gray-900 font-medium max-w-2xl">{vaccine.manufacturer} </div>
                         </td>
                         <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium max-w-2xl">{vaccine.manufacturer} </span>
+                          <span className="text-gray-900 font-medium max-w-2xl">{vaccine.facility} </span>
+                        </td>
+                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                          <span className="text-gray-900 font-medium">{vaccine.batch} </span>
                         </td>
                         <td className="px-6 py-4 text-center flex items-center justify-center space-x-4">
                           <div
