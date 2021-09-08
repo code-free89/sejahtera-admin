@@ -24,28 +24,28 @@ const GlobalSection: React.FC = () => {
   const updateStatisticsData = async () => {
     const data = (await db.collection('statistics').doc('global').get()).data() as firebase.firestore.DocumentData;
     setDate(data.date);
-    setWorldConfirmed(data.worldConfirmed);
-    setWorldConfirmedToday(data.worldConfirmedToday);
-    setWorldRecovered(data.worldRecovered);
-    setWorldRecoveredToday(data.worldRecoveredToday);
-    setWorldDeath(data.worldDeath);
-    setWorldDeathToday(data.worldDeathToday);
+    setWorldConfirmed(data.confirmedCases);
+    setWorldConfirmedToday(data.todayConfirmedCases);
+    setWorldRecovered(data.recoveredCases);
+    setWorldRecoveredToday(data.todayRecoveredCases);
+    setWorldDeath(data.death);
+    setWorldDeathToday(data.todayDeath);
     setActiveCases(data.activeCases);
-    setActiveCasesToday(data.activeCasesToday);
+    setActiveCasesToday(data.todayActiveCases);
   };
 
   const onSave = async () => {
     try {
       const data = (await db.collection('statistics').doc('global').get()).data() as firebase.firestore.DocumentData;
       data.date = date;
-      data.confirmCase = worldConfirmed;
-      data.todayConfirmCases = worldConfirmedToday;
-      data.recovered = worldRecovered;
-      data.todayRecovered = worldRecoveredToday;
+      data.confirmedCases = worldConfirmed;
+      data.todayConfirmedCases = worldConfirmedToday;
+      data.recoveredCases = worldRecovered;
+      data.todayRecoveredCases = worldRecoveredToday;
       data.death = worldDeath;
       data.todayDeath = worldDeathToday;
       data.activeCase = activeCases;
-      data.todayActiveCases = activeCasesToday;
+      data.todayActiveCases = setActiveCases;
       await db.collection('statistics').doc('global').set(data);
       toast.success('Statistics updated successfully');
     } catch (e) {

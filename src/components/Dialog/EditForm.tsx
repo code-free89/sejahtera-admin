@@ -52,6 +52,7 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
       userData.state = state;
       await db.collection('users').doc(userId).set(userData);
       closeModal(false);
+      toast.success('User data updated successfully.');
     } catch (e: any) {
       toast.warn(e.message);
     }
