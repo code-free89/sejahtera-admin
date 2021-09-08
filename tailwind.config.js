@@ -10,8 +10,8 @@ module.exports = {
   theme: {
     backgroundColor: theme => ({
       ...theme('colors'),
-      'primary': '#3490dc',
-      'secondary': '#ffed4a',
+      'primary': '#ECD278',
+      'secondary': '#EDDE89',
       'danger': '#e3342f',
     }),
     extend: {

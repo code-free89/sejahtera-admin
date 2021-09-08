@@ -6,6 +6,7 @@ import Users from './Users';
 import Vaccines from './Vaccines';
 import News from './News';
 import StatisticsPage from './Statistics';
+import DigitalCertificate from './DigitalCertificate';
 
 export default function Dashboard() {
   return (
@@ -17,6 +18,7 @@ export default function Dashboard() {
         <Route exact path="/vaccines" component={Vaccines} />
         <Route exact path="/news" component={News} />
         <Route exact path="/statistics" component={StatisticsPage} />
+        <Route exact path="/digital-certificate/:userId/:vaccineId" component={DigitalCertificate} />
         <Redirect to="/" />
       </Switch>
     </div>
