@@ -44,7 +44,7 @@ const GlobalSection: React.FC = () => {
       data.todayRecoveredCases = worldRecoveredToday;
       data.death = worldDeath;
       data.todayDeath = worldDeathToday;
-      data.activeCase = activeCases;
+      data.activeCases = activeCases;
       data.todayActiveCases = setActiveCases;
       await db.collection('statistics').doc('global').set(data);
       toast.success('Statistics updated successfully');

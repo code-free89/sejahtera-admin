@@ -18,7 +18,6 @@ export default function Dashboard() {
         <Route exact path="/vaccines" component={Vaccines} />
         <Route exact path="/news" component={News} />
         <Route exact path="/statistics" component={StatisticsPage} />
-        <Route exact path="/digital-certificate/:userId/:vaccineId" component={DigitalCertificate} />
         <Redirect to="/" />
       </Switch>
     </div>
