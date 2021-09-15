@@ -22,7 +22,7 @@ export default function Button({
       type={type}
       disabled={disabled}
       className={classNames(
-        'flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none',
+        'flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none',
         className
       )}
       onClick={onClick}
