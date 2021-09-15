@@ -64,3 +64,33 @@ interface NewsType {
   title: string;
   timestamp: number;
 }
+
+interface UpdateStatistics {
+  activeCase: string;
+  activeCaseTrend: string;
+  confirmCase: string;
+  rValue: string;
+  recovered: string;
+  todayActiveCases: string;
+  todayConfirmCases: string;
+  todayDeath: string;
+  todayRecovered: string;
+  weeklyStatistics: string;
+  weeklyTrend: string;
+  date: string;
+  death: string;
+}
+
+interface GlobalStatistics {
+  activeCases: string;
+  aseanStatistics: string;
+  confirmedCases: string;
+  date: string;
+  death: string;
+  recoveredCases: string;
+  todayActiveCases: string;
+  todayConfirmedCases: string;
+  todayDeath: string;
+  todayRecoveredCases: string;
+  topCountries: string;
+}

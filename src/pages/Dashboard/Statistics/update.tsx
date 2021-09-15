@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
 import Button from 'components/Button';
 import { toast } from 'react-toast';
+import { UpdateStatistics } from 'types/global';
 
 const UpdateSection: React.FC = () => {
   const db = firebase.firestore();
@@ -12,28 +13,28 @@ const UpdateSection: React.FC = () => {
   const [fileName, setFileName] = useState<string>('');
 
   const [date, setDate] = useState<string>('');
-  const [totalConfirmed, setTotalConfirmed] = useState<string>('');
-  const [totalConfirmedToday, setTotalConfirmedToday] = useState<string>('');
-  const [totalRecovered, setTotalRecovered] = useState<string>('');
-  const [totalRecoveredToday, setTotalRecoveredToday] = useState<string>('');
-  const [totalDeath, setTotalDeath] = useState<string>('');
-  const [totalDeathToday, setTotalDeathToday] = useState<string>('');
-  const [activeCases, setActiveCases] = useState<string>('');
-  const [activeCasesToday, setActiveCasesToday] = useState<string>('');
+  const [confirmCase, setConfirmCase] = useState<string>('');
+  const [todayConfirmCases, setTodayConfirmCases] = useState<string>('');
+  const [recovered, setRecovered] = useState<string>('');
+  const [todayRecovered, setTodayRecovered] = useState<string>('');
+  const [death, setDeath] = useState<string>('');
+  const [todayDeath, setTodayDeath] = useState<string>('');
+  const [activeCase, setActiveCase] = useState<string>('');
+  const [todayActiveCases, setTodayActiveCases] = useState<string>('');
   const storage = firebase.storage();
 
   const updateStatisticsData = async () => {
-    const data = (await db.collection('statistics').doc('update').get()).data() as firebase.firestore.DocumentData;
+    const data = (await db.collection('statistics').doc('update').get()).data() as UpdateStatistics;
     setRvalue(data.rValue);
     setDate(data.date);
-    setTotalConfirmed(data.confirmCase);
-    setTotalConfirmedToday(data.todayConfirmCases);
-    setTotalRecovered(data.recovered);
-    setTotalRecoveredToday(data.todayRecovered);
-    setTotalDeath(data.death);
-    setTotalDeathToday(data.todayDeath);
-    setActiveCases(data.activeCase);
-    setActiveCasesToday(data.todayActiveCases);
+    setConfirmCase(data.confirmCase);
+    setTodayConfirmCases(data.todayConfirmCases);
+    setRecovered(data.recovered);
+    setTodayRecovered(data.todayRecovered);
+    setDeath(data.death);
+    setTodayDeath(data.todayDeath);
+    setActiveCase(data.activeCase);
+    setTodayActiveCases(data.todayActiveCases);
   };
 
   const onSave = async () => {
@@ -41,14 +42,14 @@ const UpdateSection: React.FC = () => {
       const data = (await db.collection('statistics').doc('update').get()).data() as firebase.firestore.DocumentData;
       data.rValue = rvalue;
       data.date = date;
-      data.confirmCase = totalConfirmed;
-      data.todayConfirmCases = totalConfirmedToday;
-      data.recovered = totalRecovered;
-      data.todayRecovered = totalRecoveredToday;
-      data.death = totalDeath;
-      data.todayDeath = totalDeathToday;
-      data.activeCase = activeCases;
-      data.todayActiveCases = activeCasesToday;
+      data.confirmCase = confirmCase;
+      data.todayConfirmCases = todayConfirmCases;
+      data.recovered = recovered;
+      data.todayRecovered = todayRecovered;
+      data.death = death;
+      data.todayDeath = todayDeath;
+      data.activeCase = activeCase;
+      data.todayActiveCases = todayActiveCases;
       await db.collection('statistics').doc('update').set(data);
       toast.success('Statistics updated successfully');
     } catch (e) {
@@ -70,20 +71,19 @@ const UpdateSection: React.FC = () => {
       storage.ref(`/statistics/${fileName}.png`).put(image[0]);
     }
   };
-
   return (
     <div className="w-full pb-8">
       <div className="text-xl text-green-600 font-bold text-center">Update</div>
       <FCInput value={rvalue} onChange={setRvalue} label="Nilai R(R Value) : " />
       <FCInput value={date} onChange={setDate} label="Date : " />
-      <FCInput value={totalConfirmed} onChange={setTotalConfirmed} label="Total Confirmed : " />
-      <FCInput value={totalConfirmedToday} onChange={setTotalConfirmedToday} label="Total Confirmed Today : " />
-      <FCInput value={totalRecovered} onChange={setTotalRecovered} label="Total Recovered : " />
-      <FCInput value={totalRecoveredToday} onChange={setTotalRecoveredToday} label="Total Recovered Today : " />
-      <FCInput value={totalDeath} onChange={setTotalDeath} label="Total Death : " />
-      <FCInput value={totalDeathToday} onChange={setTotalDeathToday} label="Total Death Today : " />
-      <FCInput value={activeCases} onChange={setActiveCases} label="Active Cases : " />
-      <FCInput value={activeCasesToday} onChange={setActiveCasesToday} label="Active Cases Today : " />
+      <FCInput value={confirmCase} onChange={setConfirmCase} label="ConfirmCase : " />
+      <FCInput value={todayConfirmCases} onChange={setTodayConfirmCases} label="TodayConfirmCases : " />
+      <FCInput value={recovered} onChange={setRecovered} label="Recovered : " />
+      <FCInput value={todayRecovered} onChange={setTodayRecovered} label="Today Recovered : " />
+      <FCInput value={death} onChange={setTodayDeath} label="Death : " />
+      <FCInput value={todayDeath} onChange={setTodayDeath} label="Today Death : " />
+      <FCInput value={activeCase} onChange={setActiveCase} label="Active Cases : " />
+      <FCInput value={todayActiveCases} onChange={setTodayActiveCases} label="Today Active Cases : " />
       <div className="text-base text-gray-600 font-bold my-3">Weekly Statistics : </div>
       <input
         type="file"
