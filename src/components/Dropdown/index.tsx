@@ -9,7 +9,6 @@ type Props = {
 };
 
 const DropDown: React.FC<Props> = ({ selectedItem, setSelectedItem, data }) => {
-  console.log(selectedItem);
   const [currentItem, setCurrentItem] = useState<string>('');
   useEffect(() => {
     setCurrentItem(selectedItem);

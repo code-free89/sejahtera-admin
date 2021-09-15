@@ -6,6 +6,10 @@ import EditForm from 'components/Dialog/EditForm';
 import { UserType } from 'types/global';
 import Alert from 'components/Dialog/Alert';
 import { toast } from 'react-toast';
+import FCInput from 'components/Input/fc-input';
+import DropDown from 'components/Dropdown';
+
+const approveStatuses = ['', 'Approved', 'Not Approved'];
 
 const Users = () => {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -15,12 +19,16 @@ const Users = () => {
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
+  const [approvedState, setApprovedState] = useState<string>('');
   const [userID, setUserID] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE ?? '10', 10);
 
   const collectUsers = async (): Promise<void> => {
     const data = await db.collection('users').get();
-    setUsers([...data.docs.map(item => ({ id: item.id, data: item.data() }))]);
+    setUsers([...data.docs.map(item => ({ id: item.id, ...item.data() } as UserType))]);
   };
 
   const collectVaccines = async (): Promise<void> => {
@@ -71,6 +79,83 @@ const Users = () => {
       />
       <div className="hidden sm:block">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex space-x-4">
+            <FCInput
+              value={name}
+              onChange={(value: string) => {
+                setName(value);
+                setPageCount(
+                  users.filter(
+                    user =>
+                      user.name?.toLowerCase().includes(name.toLowerCase()) &&
+                      user.email?.toLowerCase().includes(email.toLowerCase()) &&
+                      user.phoneNumber?.toLowerCase().includes(phoneNumber.toLowerCase()) &&
+                      ((user.dose2 !== '' && approvedState === 'Approved') ||
+                        (user.dose2 === '' && approvedState === 'Not Approved') ||
+                        approvedState === '')
+                  ).length / itemsPerPage
+                );
+              }}
+              label="Name : "
+            />
+            <FCInput
+              value={email}
+              onChange={(value: string) => {
+                setEmail(value);
+                setPageCount(
+                  users.filter(
+                    user =>
+                      user.name?.toLowerCase().includes(name.toLowerCase()) &&
+                      user.email?.toLowerCase().includes(email.toLowerCase()) &&
+                      user.phoneNumber?.toLowerCase().includes(phoneNumber.toLowerCase()) &&
+                      ((user.dose2 !== '' && approvedState === 'Approved') ||
+                        (user.dose2 === '' && approvedState === 'Not Approved') ||
+                        approvedState === '')
+                  ).length / itemsPerPage
+                );
+              }}
+              label="Email : "
+            />
+            <FCInput
+              value={phoneNumber}
+              onChange={(value: string) => {
+                setPhoneNumber(value);
+                setPageCount(
+                  users.filter(
+                    user =>
+                      user.name?.toLowerCase().includes(name.toLowerCase()) &&
+                      user.email?.toLowerCase().includes(email.toLowerCase()) &&
+                      user.phoneNumber?.toLowerCase().includes(phoneNumber.toLowerCase()) &&
+                      ((user.dose2 !== '' && approvedState === 'Approved') ||
+                        (user.dose2 === '' && approvedState === 'Not Approved') ||
+                        approvedState === '')
+                  ).length / itemsPerPage
+                );
+              }}
+              label="Phone Number : "
+            />
+            <div className="w-44 flex flex-wrap">
+              <div className="text-base text-gray-600 font-bold my-3">Approve Status :</div>
+              <DropDown
+                selectedItem={approvedState}
+                setSelectedItem={value => {
+                  setApprovedState(value);
+                  setPageCount(
+                    users.filter(
+                      user =>
+                        user.name?.toLowerCase().includes(name.toLowerCase()) &&
+                        user.email?.toLowerCase().includes(email.toLowerCase()) &&
+                        user.phoneNumber?.toLowerCase().includes(phoneNumber.toLowerCase()) &&
+                        ((user.dose2 !== '' && value === 'Approved') ||
+                          (user.dose2 === '' && value === 'Not Approved') ||
+                          value === '')
+                    ).length / itemsPerPage
+                  );
+                }}
+                data={approveStatuses}
+              />
+            </div>
+          </div>
           <div className="flex flex-col mt-2">
             <div className="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-200">
@@ -94,49 +179,63 @@ const Users = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {users.map((user, index) =>
-                    index >= pageNumber * itemsPerPage && index < (pageNumber + 1) * itemsPerPage ? (
-                      <tr key={`user-${index}`} className="bg-white">
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{user.data.name} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{user.data.email} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{user.data.phoneNumber} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">
-                            {user.data.dose2 === '' ? 'Not Approved' : 'Approved'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-center flex items-center justify-center space-x-4">
-                          <div
-                            aria-hidden
-                            className="bg-gray-100 rounded-md border-gray-400 p-2"
-                            onClick={() => {
-                              setIsEditOpen(true);
-                              setUserID(user.id);
-                            }}
-                          >
-                            <PencilIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-green-500" />
-                          </div>
-                          <div
-                            aria-hidden
-                            className="bg-gray-100 rounded-md border-gray-400 p-2"
-                            onClick={() => {
-                              setIsAlertOpen(true);
-                              setUserID(user.id);
-                            }}
-                          >
-                            <TrashIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-red-500" />
-                          </div>
-                        </td>
-                      </tr>
-                    ) : (
-                      <></>
-                    )
+                  {users && users.length > 0 ? (
+                    users
+                      .filter(
+                        user =>
+                          user.name?.toLowerCase().includes(name.toLowerCase()) &&
+                          user.email?.toLowerCase().includes(email.toLowerCase()) &&
+                          user.phoneNumber?.toLowerCase().includes(phoneNumber.toLowerCase()) &&
+                          ((user.dose2 !== '' && approvedState === 'Approved') ||
+                            (user.dose2 === '' && approvedState === 'Not Approved') ||
+                            approvedState === '')
+                      )
+                      .map((user, index) =>
+                        index >= pageNumber * itemsPerPage && index < (pageNumber + 1) * itemsPerPage ? (
+                          <tr key={`user-${index}`} className="bg-white">
+                            <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                              <span className="text-gray-900 font-medium">{user.name} </span>
+                            </td>
+                            <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                              <span className="text-gray-900 font-medium">{user.email} </span>
+                            </td>
+                            <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                              <span className="text-gray-900 font-medium">{user.phoneNumber} </span>
+                            </td>
+                            <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                              <span className="text-gray-900 font-medium">
+                                {user.dose2 === '' ? 'Not Approved' : 'Approved'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-center flex items-center justify-center space-x-4">
+                              <div
+                                aria-hidden
+                                className="bg-gray-100 rounded-md border-gray-400 p-2"
+                                onClick={() => {
+                                  setIsEditOpen(true);
+                                  setUserID(user.id);
+                                }}
+                              >
+                                <PencilIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-green-500" />
+                              </div>
+                              <div
+                                aria-hidden
+                                className="bg-gray-100 rounded-md border-gray-400 p-2"
+                                onClick={() => {
+                                  setIsAlertOpen(true);
+                                  setUserID(user.id);
+                                }}
+                              >
+                                <TrashIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-red-500" />
+                              </div>
+                            </td>
+                          </tr>
+                        ) : (
+                          <></>
+                        )
+                      )
+                  ) : (
+                    <></>
                   )}
                 </tbody>
               </table>

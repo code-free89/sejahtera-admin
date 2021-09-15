@@ -32,7 +32,24 @@ interface Navigation {
 
 interface UserType {
   id: string;
-  data: firebase.firestore.DocumentData;
+  address: string;
+  age: number;
+  dose1: string;
+  dose1_date: string;
+  dose2: string;
+  dose2_date: string;
+  email: string;
+  ethnity: string;
+  gender: string;
+  isFirstTimeLogin: boolean;
+  isVerified: boolean;
+  last_checkin: string;
+  last_checkin_address: string;
+  name: string;
+  passportNo: string;
+  phoneNumber: string;
+  postcode: string;
+  state: string;
 }
 
 interface VaccineType {

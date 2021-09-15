@@ -8,7 +8,7 @@ type Props = {
 
 const FCInput: React.FC<Props> = ({ value, onChange, label }) => {
   return (
-    <>
+    <div>
       {label && <div className="text-base text-gray-600 font-bold my-3">{label}</div>}
       <input
         type="text"
@@ -16,7 +16,7 @@ const FCInput: React.FC<Props> = ({ value, onChange, label }) => {
         value={value}
         onChange={e => onChange(e.target.value)}
       />
-    </>
+    </div>
   );
 };
 

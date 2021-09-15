@@ -6,7 +6,6 @@ import Users from './Users';
 import Vaccines from './Vaccines';
 import News from './News';
 import StatisticsPage from './Statistics';
-import DigitalCertificate from './DigitalCertificate';
 
 export default function Dashboard() {
   return (
