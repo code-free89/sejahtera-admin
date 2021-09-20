@@ -9,7 +9,7 @@ export default function Auth() {
     <div className="min-h-screen w-full bg-white flex">
       <Switch>
         <Route exact path="/auth/login" component={Login} />
-        <Route exact path="/auth/register" component={Register} />
+        {/* <Route exact path="/auth/register" component={Register} /> */}
         <Route exact path="/auth/reset-password" component={ResetPassword} />
         <Redirect to="/auth/login" from="/auth" />
       </Switch>

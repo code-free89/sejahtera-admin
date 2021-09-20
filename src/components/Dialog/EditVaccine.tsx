@@ -44,7 +44,7 @@ const EditVaccine: React.FC<Props> = ({ isOpen, closeModal, vaccineId, type }) =
         ).data() as firebase.firestore.DocumentData;
         vaccineData.batch = vaccineBatch;
         vaccineData.manufacturer = vaccineManufacturer;
-        vaccineData.facility = vaccineManufacturer;
+        vaccineData.facility = vaccineFacility;
         await db.collection('vaccines').doc(vaccineName).set(vaccineData);
       }
     } catch (e: any) {
