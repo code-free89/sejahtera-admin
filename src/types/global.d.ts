@@ -1,5 +1,3 @@
-import firebase from 'firebase';
-
 interface UserInfo {
   firstName: string;
   lastName: string;

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
 import Button from 'components/Button';
 import { toast } from 'react-toast';
-import { UpdateStatistics } from 'types/global';
 
 const UpdateSection: React.FC = () => {
   const db = firebase.firestore();

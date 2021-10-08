@@ -8,7 +8,6 @@ import { emailChecker, emailValidation } from 'services/validations';
 
 import { toast } from 'react-toast';
 import ReactLoading from 'react-loading';
-import { UserInfo } from 'types/global';
 
 function ResetPassword() {
   const {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
-import { VaccineType } from 'types/global';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/outline';
 import ReactPaginate from 'react-paginate';
 import EditVaccine from 'components/Dialog/EditVaccine';
@@ -110,43 +109,47 @@ const Vaccines: React.FC = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {vaccines.map((vaccine, index) =>
                     index >= pageNumber * itemsPerPage && index < (pageNumber + 1) * itemsPerPage ? (
-                      <tr key={`user-${index}`} className="bg-white">
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{vaccine.name} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-normal text-sm text-gray-500 max-w-md">
-                          <div className="text-gray-900 font-medium max-w-2xl">{vaccine.manufacturer} </div>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium max-w-2xl">{vaccine.facility} </span>
-                        </td>
-                        <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">{vaccine.batch} </span>
-                        </td>
-                        <td className="px-6 py-4 text-center flex items-center justify-center space-x-4">
-                          <div
-                            aria-hidden
-                            className="bg-gray-100 rounded-md border-gray-400 p-2"
-                            onClick={() => {
-                              setType('edit');
-                              setVaccineId(vaccine.name);
-                              setIsVaccineEditOpen(true);
-                            }}
-                          >
-                            <PencilIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-green-500" />
-                          </div>
-                          <div
-                            aria-hidden
-                            className="bg-gray-100 rounded-md border-gray-400 p-2"
-                            onClick={() => {
-                              setIsAlertOpen(true);
-                              setVaccineId(vaccine.name);
-                            }}
-                          >
-                            <TrashIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-red-500" />
-                          </div>
-                        </td>
-                      </tr>
+                      vaccine.name !== '' ? (
+                        <tr key={`user-${index}`} className="bg-white">
+                          <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                            <span className="text-gray-900 font-medium">{vaccine.name} </span>
+                          </td>
+                          <td className="px-6 py-4 text-left whitespace-normal text-sm text-gray-500 max-w-md">
+                            <div className="text-gray-900 font-medium max-w-2xl">{vaccine.manufacturer} </div>
+                          </td>
+                          <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                            <span className="text-gray-900 font-medium max-w-2xl">{vaccine.facility} </span>
+                          </td>
+                          <td className="px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
+                            <span className="text-gray-900 font-medium">{vaccine.batch} </span>
+                          </td>
+                          <td className="px-6 py-4 text-center flex items-center justify-center space-x-4">
+                            <div
+                              aria-hidden
+                              className="bg-gray-100 rounded-md border-gray-400 p-2"
+                              onClick={() => {
+                                setType('edit');
+                                setVaccineId(vaccine.name);
+                                setIsVaccineEditOpen(true);
+                              }}
+                            >
+                              <PencilIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-green-500" />
+                            </div>
+                            <div
+                              aria-hidden
+                              className="bg-gray-100 rounded-md border-gray-400 p-2"
+                              onClick={() => {
+                                setIsAlertOpen(true);
+                                setVaccineId(vaccine.name);
+                              }}
+                            >
+                              <TrashIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-red-500" />
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        <></>
+                      )
                     ) : (
                       <></>
                     )

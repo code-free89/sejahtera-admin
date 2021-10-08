@@ -4,19 +4,11 @@ import { Link, useHistory } from 'react-router-dom';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import firebase from 'firebase';
-import {
-  nameValidation,
-  surnameValidation,
-  passwordValidation,
-  emailChecker,
-  emailValidation,
-  passwordChecker,
-} from 'services/validations';
+import { passwordValidation, emailChecker, emailValidation, passwordChecker } from 'services/validations';
 import { AuthContext } from 'providers/AuthProvider';
 
 import { toast } from 'react-toast';
 import ReactLoading from 'react-loading';
-import { UserInfo } from 'types/global';
 
 function Register() {
   const {

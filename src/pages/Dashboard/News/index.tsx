@@ -2,7 +2,6 @@ import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/outline';
 import firebase from 'firebase';
 import Button from 'components/Button';
 import React, { useEffect, useState } from 'react';
-import { NewsType } from 'types/global';
 import ReactPaginate from 'react-paginate';
 import EditNews from 'components/Dialog/EditNews';
 import Alert from 'components/Dialog/Alert';

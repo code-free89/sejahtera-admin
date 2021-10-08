@@ -10,7 +10,6 @@ import { AuthContext } from 'providers/AuthProvider';
 import { toast } from 'react-toast';
 import ReactLoading from 'react-loading';
 import Checkbox from 'components/Checkbox';
-import { UserInfo } from 'types/global';
 
 function Login() {
   const {
@@ -45,7 +44,7 @@ function Login() {
       } else {
         toast.warn("Can't find user");
       }
-    } catch (error) {
+    } catch (error: any) {
       // eslint-disable-next-line
       toast.warn(error.message);
       setIsLogging(false);

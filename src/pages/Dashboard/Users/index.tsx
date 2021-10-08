@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
-import { DownloadIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import { DownloadIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/outline';
 import ReactPaginate from 'react-paginate';
 import EditForm from 'components/Dialog/EditForm';
-import { UserType } from 'types/global';
 import Alert from 'components/Dialog/Alert';
 import { toast } from 'react-toast';
 import FCInput from 'components/Input/fc-input';
 import DropDown from 'components/Dropdown';
 import Button from 'components/Button';
 import { CSVLink } from 'react-csv';
+import AddUser from 'components/Dialog/AddUser';
 
 const approveStatuses = ['', 'Approved', 'Not Approved'];
 
@@ -26,6 +26,7 @@ const Users = () => {
   const [userID, setUserID] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [isNewUserOpen, setIsNewUserOpen] = useState<boolean>(false);
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE ?? '10', 10);
 
@@ -36,7 +37,7 @@ const Users = () => {
 
   const collectVaccines = async (): Promise<void> => {
     const data = await db.collection('vaccines').get();
-    setVaccines([...vaccines, ...data.docs.map(item => item.id)]);
+    setVaccines(['', ...vaccines, ...data.docs.map(item => item.id)]);
   };
 
   const changePage = (data: { selected: number }) => {
@@ -80,6 +81,7 @@ const Users = () => {
           setIsAlertOpen(false);
         }}
       />
+      <AddUser isOpen={isNewUserOpen} closeModal={() => setIsNewUserOpen(false)} />
       <div className="hidden sm:block">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-4 w-full relative">
@@ -158,6 +160,16 @@ const Users = () => {
                 data={approveStatuses}
               />
             </div>
+            <Button
+              type="button"
+              className="w-32 h-12 bg-green-400 hover:bg-green-500 absolute right-36 bottom-0"
+              onClick={() => {
+                setIsNewUserOpen(true);
+              }}
+            >
+              <PlusIcon className="w-5 mr-3" />
+              Add User
+            </Button>
             <div className="absolute right-0 bottom-0">
               <CSVLink
                 data={csvData}
@@ -183,7 +195,7 @@ const Users = () => {
                       ]),
                   ]);
                 }}
-                className="flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none bg-indigo-600 hover:bg-indigo-700"
+                className="flex justify-center items-center h-12 w-32 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none bg-indigo-600 hover:bg-indigo-700"
               >
                 <DownloadIcon className="w-8 h-8" />
                 <div>Export</div>

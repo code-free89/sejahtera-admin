@@ -1,6 +1,5 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import firebase from 'services/firebase';
-import { ProfileInfo } from 'types/global';
 
 type ContextProps = {
   user: firebase.User | null;
