@@ -58,6 +58,7 @@ interface VaccineType {
 }
 
 interface NewsType {
+  id: string;
   date: string;
   title: string;
   timestamp: number;

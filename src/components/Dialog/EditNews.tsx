@@ -7,7 +7,7 @@ import { toast } from 'react-toast';
 type Props = {
   isOpen: boolean;
   closeModal: (value: boolean) => void;
-  newsId: number;
+  newsId: string;
   type: string;
 };
 
@@ -20,8 +20,8 @@ const EditNews: React.FC<Props> = ({ isOpen, closeModal, newsId, type }) => {
   const [newsLink, setNewsLink] = useState<boolean>(false);
 
   const updateNewsData = async () => {
-    if (newsId !== 0) {
-      const newsData = await db.collection('news').doc(newsId.toString()).get();
+    if (newsId !== '') {
+      const newsData = await db.collection('news').doc(newsId).get();
       if (newsData) {
         setNewsDate(newsData.data()!.date);
         setNewsImage(newsData.data()!.image);

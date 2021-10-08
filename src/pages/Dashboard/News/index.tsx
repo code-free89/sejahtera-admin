@@ -13,7 +13,7 @@ const News = () => {
   const [pageCount, setPageCount] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [isNewsEditOpen, setIsNewsEditOpen] = useState<boolean>(false);
-  const [newsId, setNewsId] = useState<number>(0);
+  const [newsId, setNewsId] = useState<string>('');
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const [type, setType] = useState<string>('edit');
   const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE ?? '10', 10);
@@ -22,6 +22,7 @@ const News = () => {
     const data = await db.collection('news').get();
     setNews([
       ...data.docs.map(item => ({
+        id: item.id,
         title: item.data().title,
         date: item.data().date,
         timestamp: item.data().timestamp,
@@ -62,7 +63,7 @@ const News = () => {
           try {
             await db.collection('news').doc(newsId.toString()).delete();
             collectNews();
-          } catch (e) {
+          } catch (e: any) {
             toast.error(e.message);
           }
           setIsAlertOpen(false);
@@ -115,7 +116,7 @@ const News = () => {
                             className="bg-gray-100 rounded-md border-gray-400 p-2"
                             onClick={() => {
                               setType('edit');
-                              setNewsId(item.timestamp);
+                              setNewsId(item.id);
                               setIsNewsEditOpen(true);
                             }}
                           >
@@ -126,7 +127,7 @@ const News = () => {
                             className="bg-gray-100 rounded-md border-gray-400 p-2"
                             onClick={() => {
                               setIsAlertOpen(true);
-                              setNewsId(item.timestamp);
+                              setNewsId(item.id);
                             }}
                           >
                             <TrashIcon className="h-4 cursor-pointer transform duration-500 hover:scale-125 text-red-500" />
