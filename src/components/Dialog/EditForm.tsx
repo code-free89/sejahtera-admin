@@ -23,6 +23,7 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
 
   const [name, setName] = useState<string>('');
   const [passport, setPassport] = useState<string>('');
+  const [dob, setDOB] = useState<string>('');
   const [state, setState] = useState<string>('');
 
   const updateSelectedVaccine = async () => {
@@ -36,6 +37,7 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
         setName(userData.name);
         setPassport(userData.passportNo);
         setState(userData.state);
+        setDOB(userData.dob ?? '');
       }
     }
   };
@@ -49,6 +51,7 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
       userData.dose2_date = dose2Date;
       userData.name = name;
       userData.passportNo = passport;
+      userData.dob = dob;
       userData.state = state;
       await db.collection('users').doc(userId).set(userData);
       closeModal(false);
@@ -103,6 +106,15 @@ const EditForm: React.FC<Props> = ({ isOpen, closeModal, vaccines, userId }) => 
                     value={passport}
                     onChange={e => {
                       setPassport(e.target.value);
+                    }}
+                  />
+                  <div className="text-base text-gray-600 font-bold my-3">D.O.B: </div>
+                  <input
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={dob}
+                    onChange={e => {
+                      setDOB(e.target.value);
                     }}
                   />
                   <div className="text-base text-gray-600 font-bold my-3">State: </div>
